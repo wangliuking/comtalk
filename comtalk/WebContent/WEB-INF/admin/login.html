@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<#assign ctx=request.contextPath>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>网管登录</title>
+<meta name="author" content="DeathGhost" />
+<link rel="stylesheet" type="text/css" href="${ctx}/css/styles.css" tppabs="${ctx}/css/styles.css" />
+<style>
+body{height:100%;background:#16a085;overflow:hidden;}
+canvas{z-index:-1;position:absolute;}
+</style>
+<script src="${ctx}/js/jquery.js"></script>
+<script type="text/javascript" src="${ctx}/js/jquery-migrate-1.2.1.js"></script>
+<script src="${ctx}/js/Particleground.js" tppabs="${ctx}/js/Particleground.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+  //粒子背景特效
+  $('body').particleground({
+    dotColor: '#5cbdaa',
+    lineColor: '#5cbdaa'
+  });
+  //验证码
+ 
+  //测试提交，对接程序删除即可
+
+  /*$(".submit_btn").click(function(){
+	  location.href="index.jsp";
+	  });*/
+  /*tpa=http://***index.html*/
+
+	
+});
+
+$(function(){
+	$('#form').submit(function(){
+		var name = $('#username');
+		var pass = $('#userpass');
+		var i="";
+		if($.trim(name.val())==""){
+			i = "登录名不能为空";
+			name.focus();
+		}else if(!/^\w{5,15}$/.test($.trim(name.val()))){
+			i = "登录名非法";
+			name.focus();
+		}else if($.trim(pass.val()) == ""){
+			i = "密码不能为空";
+			pass.focus();
+		}else if(!/^\w{5,15}$/.test($.trim(pass.val()))){
+			i = "密码为非法";
+			pass.focus();
+		}
+
+		if(i != ""){
+			alert(i);
+			return false;
+		}else{
+			return true;
+		}
+	});
+/*	
+	var tip = "${tip}";
+	if (tip != ""){
+		alert(tip);
+	}
+	*/
+}); 
+
+</script>
+
+</head>
+<body>
+
+<form id="form" action="${ctx}/login?_method=submit" method="Post">
+<dl class="admin_login">
+ <dt>
+  <strong>公网管理系统</strong>
+  <em>Management System</em>
+ </dt>
+ <dd class="user_icon">
+  <input type="text" id="username" placeholder="用户ID" name="username" class="login_txtbx" value="admin"/>
+ </dd>
+ <dd class="pwd_icon">
+  <input type="password" id="userpass" placeholder="用户密码" name="userpass" class="login_txtbx" value="admin"/>
+ </dd>
+ 
+ <dd>
+  <input type="submit" value="立即登陆" class="submit_btn"/>
+ </dd>
+
+ </form>
+
+</dl>
+
+</body>
+</html>

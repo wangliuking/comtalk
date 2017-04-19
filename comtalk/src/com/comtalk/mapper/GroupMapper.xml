@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+			"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.comtalk.mapper.GroupMapper">
+	<sql id="findGroup">
+		select * from table_group 
+	</sql>
+	<!-- 分页sql基本代码 -->
+	<sql id="pageSql">
+		from table_group
+		<if test="group != null">
+			<where>
+				<if test="group.groupId != null &amp;&amp; group.groupId != ''">
+					groupId like concat('%',#{group.groupId},'%')
+				</if>
+			</where>
+		</if> 
+	</sql>
+	<!-- 具体的分页语句 -->
+	<select id="getGroupListByPage" resultMap="groupBaseResultMap">
+		<trim prefix="select * " suffix="limit">
+			<include refid="pageSql"/>
+		</trim>
+		#{pageModel.startRow},#{pageModel.pageSize}
+	</select>
+	<!-- 统计需要分页的行数 -->
+	<select id="count" resultType="int">
+		select count(*) <include refid="pageSql"/>
+	</select>
+	<!-- 新增组数据 -->
+	<insert id="save">
+		insert into table_group(
+			groupId,groupName,type) 
+		values
+		(#{groupId},#{groupName},#{type})
+	</insert>
+	
+	<!-- 查询所有组ID数据 -->
+	<select id="getAllGroupId" resultMap="groupBaseResultMap">
+		select groupId from table_group
+	</select>
+	
+	<!-- 根据组编号查询数据 -->
+	<select id="getGroupById" resultMap="groupBaseResultMap">
+			<include refid="findGroup"/>
+			<where>
+				groupId = #{groupId}
+			</where>
+	</select>
+	
+	<!-- 组信息更新 -->
+	<update id="updateGroup">
+		update table_group set groupId=#{group.groupId},groupName=#{group.groupName},type=#{group.type} where groupId=#{tempModel.tempGroup}
+	</update>
+	
+	<!-- 组删除操作-->
+	<delete id="deleteGroup">
+		delete from table_group where groupId=#{groupId}
+	</delete>
+
+	<!-- 定义ResultMap -->
+	<resultMap id="groupBaseResultMap" type="Group" autoMapping="true">
+		<!-- 定义列和java对象属性的对应关系 -->
+		<result column="groupId" property="groupId"/>
+		<result column="groupName" property="groupName"/>
+		<result column="type" property="type"/>
+	</resultMap>
+</mapper>

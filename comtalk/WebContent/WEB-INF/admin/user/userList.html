@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<#assign ctx=request.contextPath>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="${ctx}/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="${ctx}/css/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="${ctx}/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="${ctx}/css/admin-right.css" />
+    <script type="text/javascript" src="${ctx}/js/jquery-1.11.0.js"></script>
+    <script type="text/javascript" src="${ctx}/js/jquery-migrate-1.2.1.js"></script>
+    <script src="${ctx}/js/artDialog-6.0.2/dist/dialog-min.js"></script>
+	<link rel="stylesheet" href="${ctx}/js/artDialog-6.0.2/css/ui-dialog.css">
+	<style>#addnew{margin-left:20px;}</style>
+	<script type="text/javascript">
+     function deleteUser(userId){
+    		var d = dialog({
+				title: '温馨提示',
+			    content: '<img src=${ctx}/images/logo.gif><br><font size=6 color=red>您确定要删除对应的数据吗?</font>',
+			    okValue:'确定',
+			    ok:function(){
+			    	this.title("请稍等...");
+			    	window.location="${ctx}/admin/user/delete?userId="+userId;
+			    	return false;
+			    },
+			    cancelValue:'取消',
+			    cancel:function(){}
+			});
+			d.showModal();
+    	}
+     
+   //添加用户
+     $(function(){
+    	$("#addUser").click(function(){
+    		window.location="${ctx}/admin/user/toAddUser";
+    	}); 
+     });
+     </script>
+</head>
+<body>
+<form class="form-inline definewidth m20" action="${ctx}/admin/user/userList" method="post">  
+    用户名称：
+    <input type="text" name="userId" id="userId"class="abc input-default" placeholder="请输入需要查询的用户ID" value="">&nbsp;&nbsp;  
+    <button type="submit" class="btn btn-primary">查询</button>&nbsp;&nbsp;
+</form>
+<table class="table table-bordered table-hover definewidth m10" >
+    <thead>
+    <tr>
+        <th>用户ID</th>
+        <th>用户名</th>
+        <th>登录密码</th>
+        <th>鉴权码</th>
+        <th>优先级</th>
+        <th>用户类型</th>
+        <th>最近一次登录时间</th>
+        <th>登录状态</th>
+        <th colspan="2" style="text-align:center">操作</th>
+    </tr>
+    </thead>
+    	<#if userList??>
+    	<#list userList as user>
+	     <tr>
+            <td>${user.userId}</td>
+            <td>${user.userName}</td>
+            <td>${user.password}</td>
+            <td>${user.authenticateCode}</td>
+             <td>
+            	<#if user.priority==2>
+            		超级管理员
+            	<#elseif user.priority==1>
+            		管理员
+            	<#else>
+            		普通用户
+            	</#if>
+            </td>
+            <td>${user.type}</td>
+            <td><#if user.loginTime??>${user.loginTime?string("yyyy-MM-dd HH:mm:ss")}<#else>尚未登录</#if></td>
+            <td>
+            	<#if user.loginStatus==1>
+            	<font color=green>已登录</font>
+            	<#elseif user.loginStatus==0>
+            	<font color=red>未登录</font>
+            	</#if>
+            </td>                     
+            <td>
+            	<#if session_user.priority==2>
+            	<a href="${ctx}/admin/user/showUpdate?userId=${user.userId}">修改</a>
+            	<#elseif user.userId==session_user.userId>           	
+                  <a href="${ctx}/admin/user/showUpdate?userId=${user.userId}">修改</a>
+                 <#else>
+                 	无法修改
+                </#if>
+            </td>
+             <td>
+             	<#if session_user.priority==2>
+            	<a href="javascript:;" onclick="deleteUser('${user.userId}');">删除</a>
+            	<#elseif user.userId==session_user.userId>     
+                  <a href="javascript:;" onclick="deleteUser('${user.userId}');">删除</a>
+                  <#else> 
+                  	无法删除
+                 </#if>
+            </td>
+        </tr>
+        </#list>
+        </#if>
+        </table>
+        <#if pageModel.recordCount??>
+	<!-- 分页标签-->
+	<div id="pagerInfo"
+		style="margin: 5px 0px; text-align: center; background-color: #FFFF00; color: blue">
+		共${pageModel.recordCount}条,
+		分${((pageModel.recordCount+pageModel.pageSize
+		-1)/pageModel.pageSize)?int}页</div>
+	<div id="pager"><#import "../common/pager.html" as page>
+		<@page.pager pageIndex=pageModel.pageIndex pageSize=pageModel.pageSize
+		recordCount=pageModel.recordCount
+		toURL="${ctx}/admin/user/userList"/></div>
+	</#if>
+	<button type="button" class="btn btn-success" id="addUser">添加新的用户</button>
+        </body>
+</html>

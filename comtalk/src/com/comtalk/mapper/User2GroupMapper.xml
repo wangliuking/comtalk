@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+			"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.comtalk.mapper.User2GroupMapper">
+
+	<!-- 分页sql基本代码 -->
+	<sql id="pageSql">
+		from table_user2group
+		<if test="user2group.user != null">
+			<where>
+				<if test="user2group.user.userId != null &amp;&amp; user2group.user.userId != ''">
+					userId like concat('%',#{user2group.user.userId},'%')
+				</if>
+			</where>
+		</if>
+	</sql>
+	<!-- 具体的分页语句 -->
+	<select id="getUser2GroupListByPage" resultMap="User2GroupResultMap">
+		<trim prefix="select * " suffix="limit">
+			<include refid="pageSql"/>
+		</trim>
+		#{pageModel.startRow},#{pageModel.pageSize}
+	</select>
+	<!-- 统计需要分页的行数 -->
+	<select id="count" resultType="int">
+		select count(*) <include refid="pageSql"/>
+	</select>
+	<!-- 添加新的用户和组关系 -->
+	<insert id="save">
+		insert into table_user2group(userId,groupId) values(#{user2group.user.userId},#{user2group.group.groupId})
+	</insert>
+
+
+	<!-- 定义ResultMap -->	
+	<resultMap id="User2GroupResultMap" type="User2Group">
+		<!-- 配置关联表与用户的关系映射 -->
+		<association property="user" column="userId" javaType="User"
+		select="com.comtalk.mapper.UserMapper.getUserById"/>
+
+		<!-- 配置关联表与组的关系映射 -->
+		<association property="group" column="groupId" javaType="Group"
+		select="com.comtalk.mapper.GroupMapper.getGroupById"/>
+	</resultMap>
+</mapper>
