@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<#assign ctx=request.contextPath>
+<html>
+<head>
+    <title></title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="${ctx}/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="${ctx}/css/bootstrap-responsive.css" />
+    <link rel="stylesheet" type="text/css" href="${ctx}/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="${ctx}/css/admin-right.css" />
+    <script type="text/javascript" src="${ctx}/js/jquery-1.11.0.js"></script>
+    <script type="text/javascript" src="${ctx}/js/jquery-migrate-1.2.1.js"></script>
+    <script src="${ctx}/js/artDialog-6.0.2/dist/dialog-min.js"></script>
+	<link rel="stylesheet" href="${ctx}/js/artDialog-6.0.2/css/ui-dialog.css">
+</head>
+<body>
+<table class="table table-bordered table-hover definewidth m10" >
+    <thead>
+    <tr>
+        <th>源ID</th>
+        <th>目标ID</th>
+        <th>类型</th>
+        <th>内容</th>
+        <th>发送时间</th>
+        <th>发送状态</th>
+        <th colspan="2" style="text-align:center">操作</th>
+    </tr>
+    </thead>
+    	<#if smsList??>
+    	<#list smsList as sms>
+	     <tr>
+            <td>${sms.srcId}</td>
+            <td>${sms.tarId}</td>
+            <td>${sms.type}</td>
+            <td>${sms.content}</td>    
+            <td>${sms.sendTime?string("yyyy-MM-dd HH:mm:ss")}</td>
+            <td>
+            <#if sms.status==1>
+            <font color="red">已发送</font>
+            <#else>
+            <font color="greed">未发送</font>
+            </#if>
+            </td>
+            <td><a href="${ctx}/admin/sms/delete?id=${sms.id}">删除</a></td>
+        </tr>
+        </#list>
+        </#if>
+        </table>
+
+  </body>
+</html>

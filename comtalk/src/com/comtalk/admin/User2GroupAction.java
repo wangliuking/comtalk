@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.comtalk.common.PageModel;
 import com.comtalk.common.TempModel;
@@ -68,18 +69,46 @@ public class User2GroupAction {
 	 */
 	@RequestMapping("/showUpdate")
 	public String showUpdate(String userId,String groupId,Model data){
-		
-		return "user/updateUser";
+		UserDao userDao = new UserDao();
+		List<User> userList = userDao.getAllUserId();
+		GroupDao groupDao = new GroupDao();
+		List<Group> groupList = groupDao.getAllGroupId();
+		data.addAttribute("userList", userList);
+		data.addAttribute("groupList",groupList);
+		data.addAttribute("userId",userId);
+		data.addAttribute("groupId", groupId);
+		return "user2group/updateUser2Group";
 	}
 	/**
 	 * 关联数据更新
 	 * @param user
 	 * @return
 	 */
+	@ResponseBody
 	@RequestMapping("/update")
-	public String update(){
-
-		return "redirect:/admin/user/userList";
+	public Map<String,Object> update(String userId,String groupId,String updateUserId,String updateGroupId){
+		Map<String,Object> map = new HashMap<>();
+		Map<String,String> params = new HashMap<>();
+		params.put("userId", userId);
+		params.put("groupId", groupId);
+		params.put("updateUserId", updateUserId);
+		params.put("updateGroupId", updateGroupId);
+		User2GroupDao user2groupDao = new User2GroupDao();
+		int countId = user2groupDao.countId(params);
+		if(countId==0){
+			int count = user2groupDao.update(params);	
+			if(count>0){
+				map.put("tip", "添加成功");
+				map.put("status", 0);
+			}else{
+				map.put("tip", "添加失败");
+				map.put("status", 1);
+			}
+		}else if(countId!=0){
+			map.put("tip", "已存在该用户和组关联");
+			map.put("status", 2);		
+		}	
+		return map;
 	}
 	/**
 	 * 跳转到添加用户界面
@@ -97,16 +126,40 @@ public class User2GroupAction {
 	/**
 	 * 添加新的用户
 	 */
+	@ResponseBody
 	@RequestMapping("/addUser2Group")
-	public String addUser2Group(User2Group user2group,HttpServletRequest req,HttpServletResponse resp){
-		String u = req.getParameter("userId");
-		
-		User user = new User();
-		Group group = new Group();
-		user.setUserId(u);
-		user2group.setUser(user);
+	public Map<String,Object> addUser2Group(String userId,String groupId){
+		Map<String,Object> map = new HashMap<>();
+		Map<String,String> params = new HashMap<>();
+		params.put("userId", userId);
+		params.put("groupId", groupId);
 		User2GroupDao user2groupDao = new User2GroupDao();
-		user2groupDao.save(user2group);
-		return "redirect:/admin/user/userList";
+		int countId = user2groupDao.countId(params);
+		if(countId==0){
+			int count = user2groupDao.save(params);	
+			if(count>0){
+				map.put("tip", "添加成功");
+				map.put("status", 0);
+			}else{
+				map.put("tip", "添加失败");
+				map.put("status", 1);
+			}
+		}else if(countId!=0){
+			map.put("tip", "已存在该用户和组关联");
+			map.put("status", 2);		
+		}	
+		return map;
+	}
+	/**
+	 * 删除用户和组的关联
+	 */
+	@RequestMapping("/delete")
+	public String deleteUser2Group(String userId,String groupId){
+		Map<String,String> params = new HashMap<>();
+		params.put("userId", userId);
+		params.put("groupId", groupId);
+		User2GroupDao user2groupDao = new User2GroupDao();
+		user2groupDao.delete(params);
+		return "forward:/admin/user2group/user2groupList";
 	}
 }

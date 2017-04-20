@@ -33,11 +33,41 @@ public class User2GroupDao extends BaseDao{
 		return count;
 	}
 	/**
+	 * 查询是否有重复的用户和组关联
+	 */
+	public int countId(Map<String,String> params){
+		SqlSession session = getSqlSession();
+		int count = session.selectOne(NAMESPACE_NAME+"countId", params);
+		closeSqlSession();
+		return count;
+	}
+	
+	/**
 	 * 添加新的用户和组关联
 	 */
-	public int save(User2Group user2group){
+	public int save(Map<String,String> params){
 		SqlSession session = getSqlSession();
-		int count = session.insert(NAMESPACE_NAME+"save", user2group);
+		int count = session.insert(NAMESPACE_NAME+"save", params);
+		session.commit();
+		closeSqlSession();
+		return count;
+	}
+	/**
+	 * 删除用户和组的关联
+	 */
+	public int delete(Map<String,String> params){
+		SqlSession session = getSqlSession();
+		int count = session.delete(NAMESPACE_NAME+"delete",params);
+		session.commit();
+		closeSqlSession();
+		return count;
+	}
+	/**
+	 * 修改用户和组的关联
+	 */
+	public int update(Map<String,String> params){
+		SqlSession session = getSqlSession();
+		int count = session.update(NAMESPACE_NAME+"update", params);
 		session.commit();
 		closeSqlSession();
 		return count;

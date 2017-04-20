@@ -9,6 +9,9 @@
 		<typeAlias type="com.comtalk.dto.System" alias="System" />
 		<typeAlias type="com.comtalk.dto.Group" alias="Group" /> 
 		<typeAlias type="com.comtalk.dto.User2Group" alias="User2Group"/>
+		<typeAlias type="com.comtalk.dto.Sms" alias="Sms"/>
+		<typeAlias type="com.comtalk.dto.Gps" alias="Gps"/>
+		<typeAlias type="com.comtalk.dto.CallInfo" alias="CallInfo"/>
 	</typeAliases>
 
 	<!-- 配置MyBatis3的环境 -->
@@ -37,6 +40,9 @@
 		<mapper resource="com/comtalk/mapper/SystemMapper.xml"/>
 		<mapper resource="com/comtalk/mapper/GroupMapper.xml"/>
 		<mapper resource="com/comtalk/mapper/User2GroupMapper.xml"/>
+		<mapper resource="com/comtalk/mapper/SmsMapper.xml"/>
+		<mapper resource="com/comtalk/mapper/GpsMapper.xml"/>
+		<mapper resource="com/comtalk/mapper/CallInfoMapper.xml"/>
 	</mappers>
 
 

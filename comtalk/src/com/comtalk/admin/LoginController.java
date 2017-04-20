@@ -35,7 +35,7 @@ public class LoginController {
 	@ResponseBody
 	@RequestMapping(value="/loginAjax")
 	public Map<String,Object> login(String userName,String password){
-		Map<String,Object> map = new HashMap<>();
+			Map<String,Object> map = new HashMap<>();
 			//获取ServletAPI
 			HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest(); 
 			//创建dao对象

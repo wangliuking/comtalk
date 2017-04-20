@@ -29,13 +29,14 @@
                     	         {id:'12',text:'系统参数管理',href:'${ctx}/admin/system/systemList'},
                     	         {id:'13',text:'组管理',href:'${ctx}/admin/group/groupList'},
                     	         {id:'14',text:'用户和组关联管理',href:'${ctx}/admin/user2group/user2groupList'},
-                    	         {id:'15',text:'管理',href:'${ctx}/admin/timelimited/timeList'}
                     	         ]}]},
                        {id:'2',
                     	  homePage:'21',
                     	  menu:[{text:'业务管理',
                     	  items:[
-                    	          {id:'21',text:'订单管理',href:'${ctx}/admin/order/orderList'}
+                    	          {id:'21',text:'短信记录管理',href:'${ctx}/admin/sms/smsList'},
+                    	          {id:'22',text:'GPS数据管理',href:'${ctx}/admin/gps/gpsList'},
+                    	          {id:'23',text:'呼叫信息管理',href:'${ctx}/admin/callInfo/callInfoList'}
                     	        ]}]}];
         new PageUtil.MainPage({
             modulesConfig : config

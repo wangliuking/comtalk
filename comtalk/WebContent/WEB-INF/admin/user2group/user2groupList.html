@@ -14,14 +14,14 @@
 	<link rel="stylesheet" href="${ctx}/js/artDialog-6.0.2/css/ui-dialog.css">
 	<style>#addnew{margin-left:20px;}</style>
 	<script type="text/javascript">
-     function deleteUser(userId){
+     function deleteUser2Group(userId,groupId){
     		var d = dialog({
 				title: '温馨提示',
 			    content: '<img src=${ctx}/images/logo.gif><br><font size=6 color=red>您确定要删除对应的数据吗?</font>',
 			    okValue:'确定',
 			    ok:function(){
 			    	this.title("请稍等...");
-			    	window.location="${ctx}/admin/user/delete?userId="+userId;
+			    	window.location="${ctx}/admin/user2group/delete?userId="+userId+"&groupId="+groupId;
 			    	return false;
 			    },
 			    cancelValue:'取消',
@@ -29,6 +29,10 @@
 			});
 			d.showModal();
     	}
+     //修改关联数据
+     function updateUser2Group(userId,groupId){
+    	 window.location="${ctx}/admin/user2group/showUpdate?userId="+userId+"&groupId="+groupId;
+     }
      
    //添加用户
      $(function(){
@@ -62,22 +66,10 @@
             <td>${user2group.group.groupId}</td>
             <td>${user2group.group.groupName}</td>                     
             <td>
-            	<#if session_user.priority==2>
-            	<a href="${ctx}/admin/user/showUpdate?userId=">修改</a>
-            	<#elseif user.userId==session_user.userId>           	
-                  <a href="${ctx}/admin/user/showUpdate?userId=">修改</a>
-                 <#else>
-                 	无法修改
-                </#if>
+            	<a href="javascript:;" onclick="updateUser2Group('${user2group.user.userId}','${user2group.group.groupId}');">修改</a>
             </td>
-             <td>
-             	<#if session_user.priority==2>
-            	<a href="javascript:;" onclick="deleteUser('');">删除</a>
-            	<#elseif user.userId==session_user.userId>     
-                  <a href="javascript:;" onclick="deleteUser('');">删除</a>
-                  <#else> 
-                  	无法删除
-                 </#if>
+             <td>         	
+            	<a href="javascript:;" onclick="deleteUser2Group('${user2group.user.userId}','${user2group.group.groupId}');">删除</a>
             </td>
         </tr>
         </#list>

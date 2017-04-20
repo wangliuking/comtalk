@@ -28,9 +28,20 @@
 	</select>
 	<!-- 添加新的用户和组关系 -->
 	<insert id="save">
-		insert into table_user2group(userId,groupId) values(#{user2group.user.userId},#{user2group.group.groupId})
+		insert into table_user2group(userId,groupId) values(#{userId},#{groupId})
 	</insert>
-
+	<!-- 修改用户和组的关联 -->
+	<update id="update">
+		update table_user2group set userId=#{userId},groupId=#{groupId} where userId=#{updateUserId} and groupId=#{updateGroupId}
+	</update>
+	<!-- 删除用户和组的关联 -->
+	<delete id="delete">
+		delete from table_user2group where userId=#{userId} and groupId=#{groupId}
+	</delete>
+	<!-- 根据用户ID和组ID查询是否有相同数据 -->
+	<select id="countId" resultType="int">
+		select count(*) from table_user2group where userId=#{userId} and groupId=#{groupId}
+	</select>
 
 	<!-- 定义ResultMap -->	
 	<resultMap id="User2GroupResultMap" type="User2Group">
